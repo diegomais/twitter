@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: deps
+    command: npm run start:dev
+    container_name: twitter_backend
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongo/twitter
+    ports:
+      - 3333:3333
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mongo:
+    container_name: twitter_mongo
+    image: mongo
+    ports:
+      - 27017:27017
