@@ -4,8 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TweetsModule } from './tweets/tweets.module';
 
 @Module({
   imports: [
@@ -31,8 +30,7 @@ import { AppService } from './app.service';
         uri: configService.get<string>('MONGODB_URI'),
       }),
     }),
+    TweetsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
