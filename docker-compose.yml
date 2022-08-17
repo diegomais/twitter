@@ -4,7 +4,6 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
       target: deps
     command: npm run start:dev
     container_name: twitter_backend
@@ -17,6 +16,22 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+      target: deps
+    command: yarn dev
+    container_name: twitter_frontend
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_GRAPHQL_URI: http://localhost:3333/graphql
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/:/usr/src/app
+      - /usr/src/app/node_modules/
 
   mongo:
     container_name: twitter_mongo
