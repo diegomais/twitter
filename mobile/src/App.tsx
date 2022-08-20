@@ -1,9 +1,14 @@
 import { registerRootComponent } from 'expo'
 import React from 'react'
-import Home from './screens/Home'
+import AppProvider from './contexts'
+import Navigation from './navigation'
 
 const App = () => {
-  return <Home />
+  return (
+    <AppProvider>
+      <Navigation />
+    </AppProvider>
+  )
 }
 
 registerRootComponent(App)
