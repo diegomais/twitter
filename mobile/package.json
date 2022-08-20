@@ -1,12 +1,16 @@
 {
   "name": "twitter",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "src/App.tsx",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest",
+    "test:watch": "jest --watch --coverage=false --changedSince=origin/master",
+    "test:debug": "jest -o --watch --coverage=false",
+    "test:updateSnapshots": "jest -u --coverage=false"
   },
   "dependencies": {
     "expo": "~46.0.8",
@@ -18,9 +22,28 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@types/jest": "^26.0.24",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.69.1",
+    "@types/react-test-renderer": "^18.0.0",
+    "jest": "^26.6.3",
+    "jest-expo": "^46.0.1",
+    "react-test-renderer": "^18.0.0",
     "typescript": "~4.3.5"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/babel.config.js",
+      "!**/jest.setup.js"
+    ],
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ]
   },
   "private": true
 }
