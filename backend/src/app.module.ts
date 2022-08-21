@@ -20,7 +20,7 @@ import { TweetsModule } from './tweets/tweets.module';
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')
           .default('development'),
-        PORT: Joi.number().default(3333),
+        PORT: Joi.number().default(4000),
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({

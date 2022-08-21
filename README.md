@@ -74,7 +74,7 @@ Use the following command to run all containers (from within the twitter directo
 docker-compose up
 ```
 
-You can now use the API at [http://localhost:3333](http://localhost:3333) and view the Web App in the browser at [http://localhost:3000](http://localhost:3000).
+You can now use the API at [http://localhost:4000](http://localhost:4000) and view the Web App in the browser at [http://localhost:3000](http://localhost:3000).
 
 ### Mobile
 
@@ -86,7 +86,7 @@ Follow the instructions for Expo CLI available in the official [React Native Doc
 
 #### Adding GraphQL URI
 
-1. Add the GraphQL URI (e.g. `http://localhost:3333/graphql`) into `mobile/src/lib/apollo/client.ts` file.
+1. Add the GraphQL URI (e.g. `http://localhost:4000/graphql`) into `mobile/src/lib/apollo/client.ts` file.
 
 #### Installing dependencies and running the mobile application
 

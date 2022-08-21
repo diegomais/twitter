@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
 
-const uriAuthority = 'localhost:3333'
+const uriAuthority = 'localhost:4000'
 
 const link = new GraphQLWsLink(
   createClient({
