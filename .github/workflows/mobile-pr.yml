@@ -49,4 +49,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: '<h2>Preview release channel "pr-${{ github.event.number }}"</h2><p>Open the camera app on your device and scan the code below</p><img src="https://qr.expo.dev/expo-go?owner=${{ github.repository_owner }}&slug=${{ github.event.repository.name }}&releaseChannel=pr-${{ github.event.number }}" height="200px" width="200px"><p>Or, open this <a href="exp://exp.host/@${{ github.repository_owner }}/${{ github.event.repository.name }}?release-channel=pr-${{ github.event.number }}">link</a> on your device.</p>'
+          msg: '# Preview release channel "pr-${{ github.event.number }}"\nOpen the camera app on your device and scan the code below\n<img src="https://qr.expo.dev/expo-go?owner=${{ github.repository_owner }}&slug=${{ github.event.repository.name }}&releaseChannel=pr-${{ github.event.number }}" height="200px" width="200px">\nOr, open this [link](exp://exp.host/@${{ github.repository_owner }}/${{ github.event.repository.name }}?release-channel=pr-${{ github.event.number }}) on your device.'
