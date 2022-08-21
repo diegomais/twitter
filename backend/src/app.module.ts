@@ -26,6 +26,7 @@ import { TweetsModule } from './tweets/tweets.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver,
+      persistedQueries: false,
       sortSchema: true,
       subscriptions: { 'graphql-ws': true },
     }),
