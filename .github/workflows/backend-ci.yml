@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Set up repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
