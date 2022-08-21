@@ -21,7 +21,7 @@ const Timeline = ({
     <View style={styles.container}>
       <FlatList
         data={tweets ?? []}
-        keyExtractor={tweet => tweet.id}
+        keyExtractor={(tweet) => tweet.id}
         renderItem={({ item }) => <Tweet onLike={onLikeATweet} tweet={item} />}
         onRefresh={onRefresh}
         refreshing={refreshing}

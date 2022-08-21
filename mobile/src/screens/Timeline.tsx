@@ -68,7 +68,7 @@ const Timeline = () => {
           if (!subscriptionData.data) return prev
           const { tweetLiked } = subscriptionData.data
           return Object.assign({}, prev, {
-            tweets: prev.tweets.map(tweet =>
+            tweets: prev.tweets.map((tweet) =>
               tweet.id === tweetLiked.id ? { ...tweet, ...tweetLiked } : tweet
             ),
           })

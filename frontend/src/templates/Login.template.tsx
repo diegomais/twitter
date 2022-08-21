@@ -21,7 +21,7 @@ const Login = ({ onSubmit }: LoginProps) => {
 
       <form onSubmit={handleSubmit}>
         <input
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
           value={username}
         />
