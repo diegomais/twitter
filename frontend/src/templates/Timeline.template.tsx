@@ -32,14 +32,14 @@ const Timeline = ({
       <form>
         <textarea
           placeholder="What's happening?"
-          onChange={e => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)}
           onKeyDown={handleNewTweet}
           value={text}
         />
       </form>
 
       <ul className={styles.list}>
-        {tweets.map(tweet => (
+        {tweets.map((tweet) => (
           <TweetComponent key={tweet.id} tweet={tweet} onLike={onLikeATweet} />
         ))}
       </ul>

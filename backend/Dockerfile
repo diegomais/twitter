@@ -24,6 +24,6 @@ COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/package.json ./package.json
 
-EXPOSE 3333
+EXPOSE 4000
 
 CMD [ "node", "dist/main"]
