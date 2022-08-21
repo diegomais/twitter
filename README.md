@@ -92,7 +92,7 @@ Follow the instructions for Expo CLI available in the official [React Native Doc
 
 #### Adding GraphQL URI
 
-1. Add the GraphQL URI (e.g. `http://localhost:4000/graphql`) into `mobile/src/lib/apollo/client.ts` file.
+1. Add the GraphQL URI (e.g. `http://localhost:4000/graphql`) into `mobile/src/config/environment.ts` file.
 
 #### Installing dependencies and running the mobile application
 
