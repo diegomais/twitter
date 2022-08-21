@@ -10,10 +10,10 @@ services:
     depends_on:
       - mongo
     environment:
-      - APOLLO_KEY=
-      - APOLLO_GRAPH_REF=
-      - APOLLO_SCHEMA_REPORTING=false
-      - MONGODB_URI=mongodb://mongo/twitter
+      APOLLO_KEY:
+      APOLLO_GRAPH_REF:
+      APOLLO_SCHEMA_REPORTING: false
+      MONGODB_URI: mongodb://mongo/twitter
     ports:
       - 4000:4000
     volumes:
@@ -29,7 +29,10 @@ services:
     depends_on:
       - backend
     environment:
+      NEXT_PUBLIC_GRAPHQL_HTTP_PROTOCOL: http
       NEXT_PUBLIC_GRAPHQL_URI_AUTHORITY: localhost:4000
+      NEXT_PUBLIC_GRAPHQL_URI_PATH: graphql
+      NEXT_PUBLIC_GRAPHQL_WS_PROTOCOL: ws
     ports:
       - 3000:3000
     volumes:
