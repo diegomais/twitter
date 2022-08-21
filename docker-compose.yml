@@ -10,6 +10,9 @@ services:
     depends_on:
       - mongo
     environment:
+      - APOLLO_KEY=
+      - APOLLO_GRAPH_REF=
+      - APOLLO_SCHEMA_REPORTING=false
       - MONGODB_URI=mongodb://mongo/twitter
     ports:
       - 3333:3333
