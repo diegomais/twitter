@@ -78,7 +78,13 @@ You can now use the API at [http://localhost:4000](http://localhost:4000) and vi
 
 ### Mobile
 
-With an Android phone, you can load this project immediately at [https://expo.io/@diegomais/twitter](https://expo.io/@diegomais/twitter).
+You can load this project immediately at [https://expo.io/@diegomais/twitter](https://expo.io/@diegomais/twitter).
+
+Or, open the camera app on your device and scan the code below:
+
+<img src="https://qr.expo.dev/expo-go?owner=diegomais&slug=twitter&releaseChannel=default" height="200px" width="200px">
+
+Or, open this [link](exp://exp.host/@diegomais/twitter) on your device.
 
 #### Setting up the development environment
 
