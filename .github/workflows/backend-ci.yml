@@ -48,3 +48,7 @@ jobs:
 
       - name: Run tests
         run: npm test --ci --passWithNoTests
+
+      - name: Push to Heroku
+        if: github.ref_name == 'main'
+        run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/main:main
