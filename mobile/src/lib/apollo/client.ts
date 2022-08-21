@@ -1,10 +1,19 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
 
-const uri = 'http://localhost:3333/graphql'
+const uriAuthority = 'localhost:3333'
+
+const link = new GraphQLWsLink(
+  createClient({
+    url: `ws://${uriAuthority}/graphql`,
+  })
+)
 
 export const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
-  uri,
+  uri: `http://${uriAuthority}/graphql`,
+  link,
 })
 
 export default apolloClient

@@ -22,6 +22,7 @@ import { TweetsModule } from './tweets/tweets.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       driver: ApolloDriver,
+      subscriptions: { 'graphql-ws': true },
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

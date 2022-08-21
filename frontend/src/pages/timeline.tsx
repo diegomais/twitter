@@ -45,13 +45,30 @@ export const LIKE_A_TWEET = gql`
   }
 `
 
+export const TWEET_ADDED_SUBSCRIPTION = gql`
+  ${TWEET_FIELDS}
+  subscription OnTweetAdded {
+    tweetAdded {
+      ...TweetFields
+    }
+  }
+`
+
+export const TWEET_LIKED_SUBSCRIPTION = gql`
+  ${TWEET_FIELDS}
+  subscription OnTweetLiked {
+    tweetLiked {
+      ...TweetFields
+    }
+  }
+`
+
 const Timeline: NextPage = () => {
   const [author] = useLocalStorage<string>(TOKEN, '')
 
-  const { data, refetch } = useQuery<Tweets>(GET_TWEETS)
+  const { data, loading, subscribeToMore } = useQuery<Tweets>(GET_TWEETS)
   const [createTweet] = useMutation<{}, { author: string; text: string }>(
-    CREATE_TWEET,
-    { onCompleted: refetch }
+    CREATE_TWEET
   )
   const [likeATweet] = useMutation<{}, { id: string }>(LIKE_A_TWEET)
 
@@ -67,6 +84,33 @@ const Timeline: NextPage = () => {
       router.replace('/')
     }
   }, [author])
+
+  useEffect(() => {
+    if (!loading) {
+      subscribeToMore<{ tweetAdded: { id: string } }>({
+        document: TWEET_ADDED_SUBSCRIPTION,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+          const { tweetAdded } = subscriptionData.data
+          return Object.assign({}, prev, {
+            tweets: [tweetAdded, ...prev.tweets],
+          })
+        },
+      })
+      subscribeToMore<{ tweetLiked: { id: string } }>({
+        document: TWEET_LIKED_SUBSCRIPTION,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev
+          const { tweetLiked } = subscriptionData.data
+          return Object.assign({}, prev, {
+            tweets: prev.tweets.map(tweet =>
+              tweet.id === tweetLiked.id ? { ...tweet, ...tweetLiked } : tweet
+            ),
+          })
+        },
+      })
+    }
+  }, [loading, subscribeToMore])
 
   return (
     <>
