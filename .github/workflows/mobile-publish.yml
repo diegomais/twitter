@@ -1,16 +1,17 @@
-name: Publish mobile app on push to main
+name: Mobile - Publish a production version
 
 on:
   push:
     branches:
-      - main
+      - "main"
     paths:
-      - 'mobile/**'
+      - "mobile/**"
 
   workflow_dispatch:
 
 jobs:
-  publish:
+  preview:
+    name: Install, test and publish a production version
     runs-on: ubuntu-latest
 
     defaults:
@@ -18,28 +19,61 @@ jobs:
         shell: bash
         working-directory: mobile
 
+    strategy:
+      matrix:
+        node-version: [22.x]
+
     steps:
       - name: Set up repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: lts/*
-          cache: yarn
-          cache-dependency-path: mobile/yarn.lock
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f "${{ github.workspace }}/backend/yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=yarn" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "${{ github.workspace }}/backend/pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=pnpm" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "${{ github.workspace }}/backend/package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "command=ci" >> $GITHUB_OUTPUT
+            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "Unable to determine package manager"
+            exit 1
+          fi
 
-      - name: Set up Expo
-        uses: expo/expo-github-action@v7
+      - name: Install pnpm
+        if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
+        uses: pnpm/action-setup@v4
         with:
-          expo-version: latest
+          run_install: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: "mobile"
+
+      - name: Set up EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Run all tests
-        run: npx jest --ci --passWithNoTests
+        run: npx jest --passWithNoTests
 
-      - name: Publish app
-        run: expo publish --non-interactive
+      - name: Build app
+        run: eas build --non-interactive
