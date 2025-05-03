@@ -3,13 +3,13 @@ name: Frontend CI
 on:
   pull_request:
     branches:
-      - main
+      - 'main'
     paths:
       - 'frontend/**'
 
   push:
     branches:
-      - main
+      - 'main'
     paths:
       - 'frontend/**'
 
@@ -17,6 +17,8 @@ on:
 
 jobs:
   build:
+    name: Install, lint, check, test and build frontend
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -24,28 +26,61 @@ jobs:
         shell: bash
         working-directory: frontend
 
+    strategy:
+      matrix:
+        node-version: [22.x]
+
     steps:
       - name: Set up repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f "yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=yarn" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=pnpm" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "command=ci" >> $GITHUB_OUTPUT
+            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "Unable to determine package manager"
+            exit 1
+          fi
+
+      - name: Install pnpm
+        if: ${{ steps.detect-package-manager.outputs.manager == 'pnpm' }}
+        uses: pnpm/action-setup@v4
         with:
-          node-version: lts/*
-          cache: yarn
-          cache-dependency-path: frontend/yarn.lock
+          run_install: false
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: frontend
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Lint code
-        run: yarn lint
+        run: ${{ steps.detect-package-manager.outputs.manager }} lint
 
       - name: Check types
-        run: yarn type-check
+        run: ${{ steps.detect-package-manager.outputs.manager }} type-check
 
       - name: Run tests
         run: npx jest --ci --passWithNoTests
 
-      - name: Build webapp
-        run: yarn build
+      - name: Build
+        run: ${{ steps.detect-package-manager.outputs.manager }} build
