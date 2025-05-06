@@ -9,7 +9,7 @@ const ENV = {
   prod: {
     envName: 'PRODUCTION',
     gqlHttpProtocol: 'https',
-    gqlUriAuthority: 'diegomais-twitter.herokuapp.com',
+    gqlUriAuthority: 'twitter-p8ce.onrender.com',
     gqlUriPath: 'graphql',
     gqlWsProtocol: 'wss',
   },
